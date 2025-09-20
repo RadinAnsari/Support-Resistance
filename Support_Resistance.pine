@@ -1,0 +1,29 @@
+//@version=5
+// support/resistance dynamically.
+indicator("Swing Highs and Lows", overlay=true)
+
+
+length = input.int(5, "Swing Length", minval=1)
+
+
+isSwingHigh(len) =>
+    ta.pivothigh(high, len, len) != na
+
+isSwingLow(len) =>
+    ta.pivotlow(low, len, len) != na
+
+sHigh = ta.pivothigh(high, length, length)
+sLow  = ta.pivotlow(low, length, length)
+
+
+plotshape(not na(sHigh), title="Swing High", style=shape.triangledown, location=location.abovebar, color=color.red, size=size.tiny)
+plotshape(not na(sLow),  title="Swing Low",  style=shape.triangleup,   location=location.belowbar, color=color.green, size=size.tiny)
+
+
+var line shLine = na
+var line slLine = na
+
+if not na(sHigh)
+    shLine := line.new(bar_index - length, sHigh, bar_index, sHigh, color=color.red, width=1)
+if not na(sLow)
+    slLine := line.new(bar_index - length, sLow, bar_index, sLow, color=color.green, width=1)
